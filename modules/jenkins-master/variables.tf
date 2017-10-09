@@ -72,8 +72,7 @@ variable "tags" {
 }
 
 variable "plugins" {
-  description = "The Jenkins default plugins to install."
-  default     = "git xunit"
+  type        = "list"
+  description = "A list of Jenkins plugins to install, use short names."
+  default     = ["git", "xunit"]
 }
-
-

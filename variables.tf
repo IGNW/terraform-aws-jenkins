@@ -1,18 +1,28 @@
+# ---------------------------------------------------------------------------------------------------------------------
+# ENVIRONMENT VARIABLES
+# Define these secrets as environment variables
+# ---------------------------------------------------------------------------------------------------------------------
+
+# AWS_ACCESS_KEY_ID
+# AWS_SECRET_ACCESS_KEY
+
+# ---------------------------------------------------------------------------------------------------------------------
+# OPTIONAL PARAMETERS
+# These parameters have reasonable defaults.
+# ---------------------------------------------------------------------------------------------------------------------
+
 variable "name" {
   description = "Name to be used on all resources as prefix"
   default     = ""
 }
 
-//TODO: add support for muliple masters with active -> passive failover
-/*
-variable "master_count" {
-  description = "Number of master instances to launch"
+variable "win_slave_count" {
+  description = "Number of windows slave instances to launch"
   default     = 1
 }
-*/
 
-variable "slave_count" {
-  description = "Number of slave instances to launch"
+variable "linux_slave_count" {
+  description = "Number of linux slave instances to launch"
   default     = 1
 }
 
@@ -21,14 +31,29 @@ variable "aws_region" {
   default     = "us-east-1"
 }
 
-variable "ami_id" {
-  description = "ID of AMI to use for instance(s)"
+variable "master_ami_id" {
+  description = "ID of AMI to use for master instance(s)"
+  default     = ""
+}
+
+variable "linux_slave_ami_id" {
+  description = "ID of AMI to use for linux slave instance(s)"
+  default     = ""
+}
+
+variable "win_slave_ami_id" {
+  description = "ID of AMI to use for windows slave instance(s)"
   default     = ""
 }
 
 variable "instance_type_master" {
   description = "Instance Type to use for master instance(s)"
   default     = "t2.micro"
+}
+
+variable "http_port" {
+  description = "The port to use for HTTP traffic to Jenkins"
+  default     = 8080
 }
 
 variable "instance_type_slave" {
@@ -46,10 +71,10 @@ variable "ssh_key_path" {
   default     = ""
 }
 
-//TODO: Change to list variable and join in template
 variable "plugins" {
-  description = "The Jenkins default plugins to install."
-  default     = "git xunit"
+  type        = "list"
+  description = "A list of Jenkins plugins to install, use short names."
+  default     = ["git", "xunit"]
 }
 
 variable "tags" {

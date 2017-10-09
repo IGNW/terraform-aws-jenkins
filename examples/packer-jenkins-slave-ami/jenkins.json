@@ -1,0 +1,62 @@
+{
+  "min_packer_version": "0.12.0",
+  "variables": {
+    "aws_region": "us-east-1",
+    "jenkins_version": "2.7"
+  },
+  "builders": [{
+    "name": "amazon-linux-ami",
+    "ami_name": "jenkins-slave-amazon-linux-{{isotime | clean_ami_name}}",
+    "ami_description": "An Amazon Linux AMI that has Jenkins Slave dependencies installed.",
+    "instance_type": "t2.micro",
+    "region": "{{user `aws_region`}}",
+    "type": "amazon-ebs",
+    "source_ami_filter": {
+      "filters": {
+        "virtualization-type": "hvm",
+        "architecture": "x86_64",
+        "name": "*amzn-ami-hvm-*",
+        "block-device-mapping.volume-type": "gp2",
+        "root-device-type": "ebs"
+      },
+      "owners": ["amazon"],
+      "most_recent": true
+    },
+    "ssh_username": "ec2-user"
+  }],
+  "provisioners": [{
+    "type": "shell",
+    "inline" : [
+      "sudo yum -y update",
+      "sudo yum install -y java-1.8.0-openjdk.x86_64",
+      "sudo yum remove -y java-1.7*",
+      "sudo /usr/sbin/alternatives --set java /usr/lib/jvm/jre-1.8.0-openjdk.x86_64/bin/java"
+    ]
+  }, {
+      "type": "shell",
+      "inline" : [
+        "sudo useradd --home-dir /home/jenkins --create-home --shell /bin/bash jenkins",
+        "echo 'jenkins' | sudo passwd 'jenkins' --stdin --force",
+        "sudo mkdir /home/jenkins/jenkins-slave",
+        "wget https://repo.jenkins-ci.org/public/org/jenkins-ci/main/remoting/{{user `jenkins_version`}}/remoting-{{user `jenkins_version`}}.jar",
+        "sudo mv remoting-{{user `jenkins_version`}}.jar /home/jenkins/jenkins-slave/slave.jar"
+      ]
+  }, {
+    "type": "file",
+    "source": "jenkins-slave.conf",
+    "destination": "/tmp/jenkins-slave.conf"
+  }, {
+    "type": "file",
+    "source": "jenkins-slave-service.sh",
+    "destination": "/tmp/jenkins-slave-service.sh"
+  }, {
+    "type": "shell",
+    "inline" : [
+      "sudo mv /tmp/jenkins-slave.conf /home/jenkins/jenkins-slave/config",
+      "sudo chown -R jenkins:jenkins /home/jenkins",
+      "sudo mv /tmp/jenkins-slave-service.sh /etc/init.d/jenkins-slave",
+      "sudo chmod +x /etc/init.d/jenkins-slave",
+      "sudo chkconfig --add jenkins-slave"
+    ]
+  }]
+}

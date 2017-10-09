@@ -1,5 +1,6 @@
 # Launch EC2 instance for master
 
+# Master Server
 resource "aws_instance" "ec2_jenkins_master" {
   count                  = 1
   ami                    = "${var.ami_id}"
@@ -35,7 +36,7 @@ data "template_file" "plugins" {
   template = "${file("./modules/jenkins-master/plugins.tpl")}"
 
   vars {
-    plugins = "${var.plugins}"
+    plugins = "${join(" ", var.plugins)}"
   }
 
 }
