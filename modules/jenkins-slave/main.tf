@@ -54,7 +54,9 @@ resource "aws_instance" "ec2_jenkins_slave" {
     inline = [
       "chmod 0600 /tmp/key.pem",
       "ssh -oStrictHostKeyChecking=no -i /tmp/key.pem ec2-user@${var.jenkins_master_ip} 'sudo cat /var/lib/jenkins/secrets/initialAdminPassword' > /tmp/secret",
-      "wget -P /tmp ${local.jenkins_master_url}/jnlpJars/jenkins-cli.jar"
+      "wget -P /tmp ${local.jenkins_master_url}/jnlpJars/jenkins-cli.jar",
+      "wget -P /tmp ${local.jenkins_master_url}/jnlpJars/slave.jar",
+      "sudo mv /tmp/slave.jar /home/jenkins/jenkins-slave/"
     ]
   }
 
@@ -76,22 +78,25 @@ resource "aws_instance" "ec2_jenkins_slave" {
 
     inline = [
       "sudo chmod +x /tmp/bootstrap.sh",
-      "/tmp/bootstrap.sh ${aws_instance.ec2_jenkins_slave.tags["Name"]}"
+      "/tmp/bootstrap.sh ${self.tags["Name"]}"
     ]
   }
 
-  # Cleanup sensitive files
+  # Cleanup node registration
+  # Currenlty unable to clean-up Jenkins node meta due to TF issue: https://github.com/hashicorp/terraform/issues/13549
   /*
   provisioner "remote-exec" {
+    when = "destroy"
+
     connection  = {
+      host = "${self.private_ip}"
       user = "ec2-user"
       private_key = "${file(var.ssh_key_path)}"
     }
 
     inline = [
-      "sudo rm /tmp/secret",
-      "sudo rm /tmp/jenkins-cli.jar",
-      "sudo rm /tmp/secret.groovy"
+      "sudo service jenkins-slave stop",
+      "sudo java -jar /tmp/jenkins-cli.jar -auth admin:$(</tmp/secret) -s ${local.jenkins_master_url} delete-node ${self.tags["Name"]}"
     ]
   }
   */

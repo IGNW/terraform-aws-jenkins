@@ -1,5 +1,40 @@
 # Launch EC2 instance for master
 
+// TODO: Add ELB for HTTP & HTTPS
+// TODO: Lockdown traffic and make instances private
+// TODO: Refactor security group code so Master has SSH, HTTP + JNLP and Slaves only have SSH, JNLP
+
+# Master ELB
+/*
+resource "aws_iam_server_certificate" "test_cert" {
+  name_prefix      = "example-cert"
+  certificate_body = "${file("self-ca-cert.pem")}"
+  private_key      = "${file("test-key.pem")}"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_elb" "ourapp" {
+  name                      = "terraform-asg-deployment-example"
+  availability_zones        = ["us-west-2a"]
+  cross_zone_load_balancing = true
+
+  listener {
+    instance_port      = 8000
+    instance_protocol  = "http"
+    lb_port            = 443
+    lb_protocol        = "https"
+    ssl_certificate_id = "${aws_iam_server_certificate.test_cert.arn}"
+  }
+
+  # The instances are registered automatically
+  instances = ["${aws_instance.web.*.id}"]
+}
+
+*/
+
 # Master Server
 resource "aws_instance" "ec2_jenkins_master" {
   count                  = 1
@@ -8,7 +43,7 @@ resource "aws_instance" "ec2_jenkins_master" {
   user_data              = "${var.user_data}"
   key_name               = "${var.ssh_key_name}"
   monitoring             = true
-  vpc_security_group_ids = ["${aws_security_group.jenkins_security_group.id}"]
+  vpc_security_group_ids = ["${module.security_group_rules.jenkins_security_group_id}"]
   tags = "${merge(map("Name", format("%s-%d", var.name, count.index+1)), map("Terraform", "true"), map("Environment", var.environment), var.tags)}"
 
   provisioner "file" {
@@ -16,8 +51,8 @@ resource "aws_instance" "ec2_jenkins_master" {
       user = "ec2-user"
       private_key = "${file(var.ssh_key_path)}"
     }
-    content     = "${data.template_file.plugins.rendered}"
-    destination = "/tmp/plugins.sh"
+    content     = "${var.setup_data}"
+    destination = "/tmp/setup.sh"
   }
 
   provisioner "remote-exec" {
@@ -26,53 +61,18 @@ resource "aws_instance" "ec2_jenkins_master" {
       private_key = "${file(var.ssh_key_path)}"
     }
     inline = [
-      "chmod +x /tmp/plugins.sh",
-      "sudo /tmp/plugins.sh"
+      "chmod +x /tmp/setup.sh",
+      "sudo /tmp/setup.sh"
     ]
   }
-}
-
-data "template_file" "plugins" {
-  template = "${file("./modules/jenkins-master/plugins.tpl")}"
-
-  vars {
-    plugins = "${join(" ", var.plugins)}"
-  }
-
-}
-
-# create security group to allow ssh
-resource "aws_security_group" "jenkins_security_group" {
-  name_prefix = "${var.name}"
-  description = "Security group for the ${var.name}"
-  vpc_id      = "${var.vpc_id}"
-}
-
-resource "aws_security_group_rule" "allow_ssh_inbound" {
-  type        = "ingress"
-  from_port   = "${var.ssh_port}"
-  to_port     = "${var.ssh_port}"
-  protocol    = "tcp"
-  cidr_blocks = ["${var.allowed_ssh_cidr_blocks}"]
-
-  security_group_id = "${aws_security_group.jenkins_security_group.id}"
-}
-
-resource "aws_security_group_rule" "allow_all_outbound" {
-  type        = "egress"
-  from_port   = 0
-  to_port     = 0
-  protocol    = "-1"
-  cidr_blocks = ["0.0.0.0/0"]
-
-  security_group_id = "${aws_security_group.jenkins_security_group.id}"
 }
 
 module "security_group_rules" {
   source = "../jenkins-security-group-rules"
 
-  security_group_id           = "${aws_security_group.jenkins_security_group.id}"
+  name      = "${var.name}"
   allowed_inbound_cidr_blocks = ["${var.allowed_inbound_cidr_blocks}"]
+  allowed_ssh_cidr_blocks = ["${var.allowed_ssh_cidr_blocks}"]
 
   http_port = "${var.http_port}"
   https_port = "${var.https_port}"

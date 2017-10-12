@@ -56,6 +56,11 @@ variable "http_port" {
   default     = 8080
 }
 
+variable "jnlp_port" {
+  description = "The Port to use for Jenkins master to slave communication bewtween instances"
+  default     = 49187
+}
+
 variable "instance_type_slave" {
   description = "Instance Type to use for slave instance(s)"
   default     = "t2.micro"

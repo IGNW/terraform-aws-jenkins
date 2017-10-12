@@ -1,9 +1,9 @@
 output "security_group_name" {
-  value = "${aws_security_group.jenkins_security_group.name}"
+  value = "${module.security_group_rules.security_group_name}"
 }
 
 output "jenkins_security_group_id" {
-  value = "${aws_security_group.jenkins_security_group.id}"
+  value = "${module.security_group_rules.jenkins_security_group_id}"
 }
 
 output "private_ip" {

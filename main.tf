@@ -34,8 +34,8 @@ module "jenkins-master" {
   instance_type               = "${var.instance_type_master}"
 
   ami_id                      = "${var.master_ami_id == "" ? data.aws_ami.jenkins.image_id : var.master_ami_id}"
-  user_data                   = "${data.template_file.user_data_master.rendered}"
-  plugins                     = "${var.plugins}"
+  user_data                   = ""
+  setup_data                  = "${data.template_file.setup_data_master.rendered}"
 
   #subnet_ids                 = "${data.aws_subnet_ids.default.ids}"
   http_port                   = "${var.http_port}"
@@ -45,8 +45,13 @@ module "jenkins-master" {
   ssh_key_path                = "${var.ssh_key_path}"
 }
 
-data "template_file" "user_data_master" {
+data "template_file" "setup_data_master" {
   template = "${file("./modules/jenkins-master/setup.tpl")}"
+
+  vars = {
+    jnlp_port = "${var.jnlp_port}"
+    plugins = "${join(" ", var.plugins)}"
+  }
 }
 
 # Jenkins Linux Slave Instance(s)

@@ -1,10 +1,25 @@
-variable "security_group_id" {
-  description = "The ID of the security group to which we should add the Jenkins security group rules"
+variable "vpc_id" {
+  description = "The ID of the VPC"
+  default = ""
+}
+
+variable "name" {
+  description = "The Name of the security group to which we should add the Jenkins security group rules"
 }
 
 variable "allowed_inbound_cidr_blocks" {
   description = "A list of CIDR-formatted IP address ranges from which the EC2 Instances will allow connections to Jenkins"
   type        = "list"
+}
+
+variable "allowed_ssh_cidr_blocks" {
+  description = "A list of CIDR-formatted IP address ranges from which the EC2 Instances will allow connections on SSH"
+  type        = "list"
+}
+
+variable "ssh_port" {
+  description = "The port used for SSH connections"
+  default     = 22
 }
 
 variable "http_port" {

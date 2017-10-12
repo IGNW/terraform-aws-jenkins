@@ -39,11 +39,15 @@ export SECRET=$(curl --user "admin:$PASS" -d "$TOKEN" --data-urlencode "script=$
 #java -jar slave.jar -jnlpUrl ${jenkins_master_url}/computer/$1/slave-agent.jnlp -secret $SECRET
 
 # write new config
-cat > /home/jenkins/jenkins-slave/conf <<EOF
+sudo tee /home/jenkins/jenkins-slave/config >/dev/null <<EOF
 JENKINS_URL=${jenkins_master_url}
 JENKINS_SLAVE=$1
 JENKINS_SECRET=$SECRET
 EOF
 
+sudo chown jenkins:jenkins /home/jenkins/jenkins-slave
+
+sleep 10
+
 # start the service
-sudo service jenkins start
+sudo service jenkins-slave start
