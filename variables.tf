@@ -12,7 +12,7 @@
 # ---------------------------------------------------------------------------------------------------------------------
 
 variable "name" {
-  description = "Name to be used on all resources as prefix"
+  description = "Name to be used on all instances as prefix"
   default     = ""
 }
 
