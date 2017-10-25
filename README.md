@@ -21,8 +21,6 @@ Each Module has the following folder structure:
 
 To deploy Jenkins servers using this Module:
 
-## TODO: UPDATE THIS SECTION
-
 1. Create a Jankins Master AMI using a Packer template installs jenkins and all of the required dependencies.
    Here is an [example Packer template](https://github.com/ignw/terraform-aws-jenkins/tree/master/examples/jenkins-ami#quick-start). 
    
@@ -105,14 +103,6 @@ IGNW can help with:
 
 * [jenkins-security-group-rules](https://github.com/ignw/terraform-aws-jenkins/tree/master/modules/jenkins-security-group-rules): Defines the security group rules used by a 
   Jenkins cluster to control the traffic that is allowed to go in and out of the cluster.
-
-
-
-
-## How do I contribute to this Module?
-
-Contributions are very welcome! Check out the [Contribution Guidelines](https://github.com/hashicorp/terraform-aws-jenkins/tree/master/CONTRIBUTING.md) for instructions.
-
 
 
 ## How is this Module versioned?
