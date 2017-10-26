@@ -82,8 +82,6 @@ a version number bump.
  
 ## Who maintains this Module?
 
-## TODO: UPDATE THIS MODULE
-
 This Module is maintained by [IGNW](http://www.ignw.io/). If you're looking for help or commercial 
 support, send an email to [support@infogroupnw.com](mailto:support@infogroupnw.com?Subject=Jenkins%20Module). 
 IGNW can help with:
