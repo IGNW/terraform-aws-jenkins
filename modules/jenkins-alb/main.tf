@@ -40,7 +40,7 @@ resource "aws_lb_target_group_attachment" "tg_attach" {
 }
 
 # Associate the listener resource to the load balancer, and configure SSL
-resource "aws_lb_listener" "jiraconf-lb-listener" {
+resource "aws_lb_listener" "lb-listener" {
   load_balancer_arn = "${aws_lb.alb.arn}"
   port              = 443
   protocol          = "HTTPS"
