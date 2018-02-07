@@ -37,12 +37,17 @@ module "jenkins-master" {
   user_data                   = ""
   setup_data                  = "${data.template_file.setup_data_master.rendered}"
 
-  #subnet_ids                 = "${data.aws_subnet_ids.default.ids}"
   http_port                   = "${var.http_port}"
   allowed_ssh_cidr_blocks     = ["0.0.0.0/0"]
   allowed_inbound_cidr_blocks = ["0.0.0.0/0"]
   ssh_key_name                = "${var.ssh_key_name}"
   ssh_key_path                = "${var.ssh_key_path}"
+
+  # Config used by the Application Load Balancer
+  subnet_ids                  = "${data.aws_subnet_ids.default.ids}"
+  aws_ssl_certificate_arn     = "${var.aws_ssl_certificate_arn}"
+  dns_zone                    = "${var.dns_zone}"
+  app_dns_name                = "${var.app_dns_name}"
 }
 
 data "template_file" "setup_data_master" {
