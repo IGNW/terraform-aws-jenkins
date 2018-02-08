@@ -2,12 +2,12 @@
 # LB security group
 #-------------------
 resource "aws_security_group" "lb_security_group" {
-  name_prefix = "${var.name_prefix}-lb"
+  name_prefix = "${var.name_prefix}"
   description = "Security group for the load balancer"
   vpc_id      = "${var.vpc_id}"
 
   tags {
-    Name = "${var.name_prefix}-lb"
+    Name = "${var.name_prefix}"
   }
 }
 

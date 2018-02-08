@@ -11,7 +11,7 @@ data "aws_subnet_ids" "default" {
 # Create the security group to control access to the load balancer
 module "lb-security-group" {
   source                      = "../jenkins-alb-security-group"
-  name_prefix                 = "${var.name_prefix}-sg"
+  name_prefix                 = "${var.name_prefix}-lb-sg"
   allowed_inbound_cidr_blocks = "${var.allowed_inbound_cidr_blocks}"
   jenkins_private_ip          = "${data.aws_instance.jenkins.private_ip}"
   vpc_id                      = "${var.vpc_id}"
