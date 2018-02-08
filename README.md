@@ -42,11 +42,18 @@ terraform init
 
 terraform plan --var "ssh_key_name=ignw_dev" \
 --var "ssh_key_path=~/.ssh/ignw_dev.pem" \
---var "linux_slave_count=1"
+--var "linux_slave_count=1" \
+--var aws_ssl_certificate_arn="arn:aws:acm:us-east-1:xxxxxxxxxxx" \
+--var dns_zone="example.com" \
+--var app_dns_name="jenkins.example.com" \
 
 terraform apply --var "ssh_key_name=ignw_dev" \
 --var "ssh_key_path=~/.ssh/ignw_dev.pem" \
---var "linux_slave_count=1"
+--var "linux_slave_count=1" \
+--var aws_ssl_certificate_arn="arn:aws:acm:us-east-1:xxxxxxxxxxx" \
+--var dns_zone="example.com" \
+--var app_dns_name="jenkins.example.com" \
+
 ```
 Argument | Description
 --- | ---
@@ -65,6 +72,9 @@ tags | A map of tags to add to all resources
 master_ami_id | ID of the AMI to use for master instance. Default: lookup latest IGNW master AMI
 linux_slave_ami_id | ID of the AMI to use for linux slave instance(s). Default: lookup latest IGNW linux slave AMI
 win_slave_ami_id | ID of the AMI to use for windows slave instance(s). Default: lookup latest IGNW windows slave AMI
+aws_ssl_certificate_arn | Amazon Resource Name for the certificate to be used on the load balancer for HTTPS
+dns_zone | DNS zone in AWS Route53 to use for the Application Load Balancer (ALB)
+app_dns_name | DNS name within the zone to dynamically point to the ALB
 
 ## What's a Module?
 
