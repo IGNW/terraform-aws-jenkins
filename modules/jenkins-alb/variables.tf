@@ -1,4 +1,4 @@
-variable "name" {
+variable "name_prefix" {
   description = "Name to be used on resources as prefix"
   default     = ""
 }

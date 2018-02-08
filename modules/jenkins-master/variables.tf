@@ -37,6 +37,10 @@ variable "app_dns_name" {
   description = "DNS name within the zone to dynamically point to the ALB"
 }
 
+variable "alb_prefix" {
+  description = "Naming prefix for ALB-related resources"
+}
+
 variable "user_data" {
   description = "A User Data script to execute while the server is booting."
 }

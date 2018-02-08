@@ -82,7 +82,7 @@ module "security_group_rules" {
 # Add the application load balancer
 module "jenkins-alb" {
   source                      = "../jenkins-alb"
-  name                        = "${var.name}"
+  name_prefix                 = "${var.alb_prefix}"
   vpc_id                      = "${var.vpc_id}"
   allowed_inbound_cidr_blocks = "${var.allowed_inbound_cidr_blocks}"
   http_port                   = "${var.http_port}"

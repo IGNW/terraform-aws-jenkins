@@ -31,6 +31,7 @@ module "jenkins-master" {
   vpc_id                      = "${data.aws_vpc.default.id}"
 
   name                        = "${var.name == "" ? "jenkins-master" : join("-", list(var.name, "jenkins-master"))}"
+  alb_prefix                  = "${var.name == "" ? "jenkins" : join("-", list(var.name, "jenkins"))}"
   instance_type               = "${var.instance_type_master}"
 
   ami_id                      = "${var.master_ami_id == "" ? data.aws_ami.jenkins.image_id : var.master_ami_id}"
