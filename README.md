@@ -4,7 +4,7 @@ This repo contains a Module for how to deploy a [Jenkins](https://jenkins.io/) c
 [AWS](https://aws.amazon.com/) using [Terraform](https://www.terraform.io/). Jenkins is a distributed automation server, generally associated with [Continuous Integration (CI)](https://en.wikipedia.org/wiki/Continuous_integration) and [Continuous Delivery (CD)](https://en.wikipedia.org/wiki/Continuous_delivery).  A Jenkins cluster typically involves one
 or more [master](https://wiki.jenkins.io/display/JENKINS/Distributed+builds) instance(s) coupled with one or more [slave](https://wiki.jenkins.io/display/JENKINS/Distributed+builds) instance(s):
 
-![Jenkins architecture](https://github.com/ignw/terraform-aws-jenkins/blob/master/docs/architecture.png?raw=true)
+![Jenkins architecture](docs/architecture.png)
 
 
 ## How to use this Module
