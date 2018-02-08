@@ -78,3 +78,17 @@ module "security_group_rules" {
   https_port = "${var.https_port}"
   jnlp_port = "${var.jnlp_port}"
 }
+
+# Add the application load balancer
+module "jenkins-alb" {
+  source                      = "../jenkins-alb"
+  name_prefix                 = "${var.alb_prefix}"
+  vpc_id                      = "${var.vpc_id}"
+  allowed_inbound_cidr_blocks = "${var.allowed_inbound_cidr_blocks}"
+  http_port                   = "${var.http_port}"
+  jenkins_instance_id         = "${aws_instance.ec2_jenkins_master.id}"
+  subnet_ids                  = "${var.subnet_ids}"
+  aws_ssl_certificate_arn     = "${var.aws_ssl_certificate_arn}"
+  app_dns_name                = "${var.app_dns_name}"
+  dns_zone                    = "${var.dns_zone}"
+}

@@ -7,6 +7,23 @@
 # AWS_SECRET_ACCESS_KEY
 
 # ---------------------------------------------------------------------------------------------------------------------
+# APPLICATION LOAD BALANCER CONFIGURATION
+# These parameters have reasonable defaults.
+# ---------------------------------------------------------------------------------------------------------------------
+
+variable "aws_ssl_certificate_arn" {
+  description = "Amazon Resource Name for the certificate to be used on the load balancer for HTTPS"
+}
+
+variable "dns_zone" {
+  description = "DNS zone in AWS Route53 to use with the ALB"
+}
+
+variable "app_dns_name" {
+  description = "DNS name within the zone to dynamically point to the ALB"
+}
+
+# ---------------------------------------------------------------------------------------------------------------------
 # OPTIONAL PARAMETERS
 # These parameters have reasonable defaults.
 # ---------------------------------------------------------------------------------------------------------------------
