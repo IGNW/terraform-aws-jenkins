@@ -14,7 +14,15 @@ variable "allowed_inbound_cidr_blocks" {
 }
 
 variable "http_port" {
-  description = "HTTP port to access the application server behind the ALB"
+  description = "HTTP port to access the application server behind the LB"
+}
+
+variable "https_port" {
+  description = "HTTPS port to access the application server behind the LB"
+}
+
+variable "jnlp_port" {
+  description = "JNLP port to access the application server behind the LB"
 }
 
 variable "jenkins_instance_id" {
@@ -36,4 +44,8 @@ variable "dns_zone" {
 
 variable "app_dns_name" {
   description = "DNS name within the zone to dynamically point to the ALB"
+}
+
+variable "availability_zone" {
+  description = ""
 }
