@@ -103,7 +103,7 @@ resource "aws_instance" "ec2_jenkins_slave" {
 }
 
 data "template_file" "bootstrap" {
-  template = "${file("./modules/jenkins-slave/setup.tpl")}"
+  template = "${file("${path.module}/setup.tpl")}"
 
   vars {
     jenkins_master_url = "${local.jenkins_master_url}"

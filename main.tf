@@ -52,7 +52,7 @@ module "jenkins-master" {
 }
 
 data "template_file" "setup_data_master" {
-  template = "${file("./modules/jenkins-master/setup.tpl")}"
+  template = "${file("${path.module}/modules/jenkins-master/setup.tpl")}"
 
   vars = {
     jnlp_port = "${var.jnlp_port}"
