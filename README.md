@@ -21,7 +21,7 @@ Each Module has the following folder structure:
 
 To deploy Jenkins servers using this Module:
 
-1. Create a Jankins Master AMI using a Packer template installs jenkins and all of the required dependencies.
+1. Create a Jenkins Master AMI using a Packer template installs jenkins and all of the required dependencies.
    Here is an [example Packer template](https://github.com/ignw/terraform-aws-jenkins/tree/master/examples/jenkins-ami#quick-start). 
    
    If you are just experimenting with this Module, you may find it more convenient to use one of our official public AMIs:   
